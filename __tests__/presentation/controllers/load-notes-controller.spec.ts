@@ -1,7 +1,8 @@
 import { Note } from '@src/domain/models';
 import { LoadNotes } from '@src/domain/usecases';
 import { LoadNotesController } from '@src/presentation/controllers/load-notes-contoller';
-import { serverError } from '@src/presentation/helpers';
+import { ok, serverError } from '@src/presentation/helpers';
+import mockDate from 'mockdate';
 
 const mockNotes = (): Note[] => [
   {
@@ -37,6 +38,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('LoadNotesController', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    mockDate.reset();
+  });
+
   it('Should call LoadNotes', async () => {
     const { sut, loadNotesStub } = makeSut();
     const loadAllSpy = jest.spyOn(loadNotesStub, 'loadAll');
@@ -51,5 +60,11 @@ describe('LoadNotesController', () => {
     });
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('Should return 200 on loadAll success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({});
+    expect(httpResponse).toEqual(ok(mockNotes()));
   });
 });
