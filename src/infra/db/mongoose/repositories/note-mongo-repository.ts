@@ -1,10 +1,14 @@
-import { AddNoteRepository, LoadNotesRepository } from '@src/data/protocols';
+import {
+  AddNoteRepository,
+  LoadNoteByIdRepository,
+  LoadNotesRepository,
+} from '@src/data/protocols';
 import { Note } from '@src/domain/models';
 import { AddNoteParams } from '@src/domain/usecases';
 import { NoteMongooseModel, MongoHelper } from '@src/infra/db/mongoose';
 
 export class NoteMongoRepository
-  implements AddNoteRepository, LoadNotesRepository
+  implements AddNoteRepository, LoadNotesRepository, LoadNoteByIdRepository
 {
   async add(params: AddNoteParams): Promise<Note> {
     const doc = new NoteMongooseModel(params);
@@ -17,5 +21,10 @@ export class NoteMongoRepository
     const notes = await NoteMongooseModel.find().lean();
     const serializedNotes = notes.map(MongoHelper.serialize);
     return serializedNotes;
+  }
+
+  async loadById(id: string): Promise<Note> {
+    const note = await NoteMongooseModel.findById(id).lean();
+    return MongoHelper.serialize(note);
   }
 }
