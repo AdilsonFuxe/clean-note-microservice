@@ -2,7 +2,7 @@ import { Note } from '@src/domain/models';
 import { AddNote } from '@src/domain/usecases';
 import { AddNoteController } from '@src/presentation/controllers';
 import { MissingParamError } from '@src/presentation/errors';
-import { badRequest } from '@src/presentation/helpers';
+import { badRequest, serverError } from '@src/presentation/helpers';
 import { HttpRequest } from '@src/presentation/protocols';
 
 const mockNote = (): Note => ({
@@ -72,5 +72,14 @@ describe('AddNoteController', () => {
     const httpRequest = mockHttpRequest();
     await sut.handle(httpRequest);
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  it('Should return 500 if AddNote throws', async () => {
+    const { sut, addNoteStub } = makeSut();
+    jest.spyOn(addNoteStub, 'add').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
