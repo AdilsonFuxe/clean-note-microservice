@@ -3,7 +3,7 @@ import {
   HttpRequest,
   HttpResponse,
 } from '@src/presentation/protocols';
-import { badRequest, serverError } from '@src/presentation/helpers';
+import { badRequest, created, serverError } from '@src/presentation/helpers';
 import { MissingParamError } from '@src/presentation/errors';
 import { AddNote } from '@src/domain/usecases';
 
@@ -17,8 +17,8 @@ export class AddNoteController implements Controller {
           return badRequest(new MissingParamError(field));
       }
       const { title, description } = httpRequest.body;
-      await this.addNote.add({ title, description });
-      return await Promise.resolve({ statusCode: 200 });
+      const note = await this.addNote.add({ title, description });
+      return created(note);
     } catch (error) {
       return serverError(error);
     }

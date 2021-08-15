@@ -10,3 +10,8 @@ export const badRequest = (error: Error): HttpResponse => ({
   statusCode: HttpStatusCode.badRequest,
   body: error,
 });
+
+export const created = (data: any): HttpResponse => ({
+  statusCode: HttpStatusCode.created,
+  body: data,
+});
