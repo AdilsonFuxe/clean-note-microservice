@@ -14,7 +14,7 @@ export class NoteMongoRepository
   }
 
   async loadAll(): Promise<readonly Note[]> {
-    const notes = await NoteMongooseModel.find();
+    const notes = await NoteMongooseModel.find().lean();
     const serializedNotes = notes.map(MongoHelper.serialize);
     return serializedNotes;
   }

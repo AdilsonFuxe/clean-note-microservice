@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '@src/main/config/app';
 import { NoteMongooseModel, MongoHelper } from '@src/infra/db/mongoose';
 
-describe('Post /note', () => {
+describe('Post /notes', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL);
   });
