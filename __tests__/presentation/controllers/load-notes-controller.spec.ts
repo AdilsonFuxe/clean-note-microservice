@@ -1,6 +1,7 @@
 import { Note } from '@src/domain/models';
 import { LoadNotes } from '@src/domain/usecases';
 import { LoadNotesController } from '@src/presentation/controllers/load-notes-contoller';
+import { serverError } from '@src/presentation/helpers';
 
 const mockNotes = (): Note[] => [
   {
@@ -41,5 +42,14 @@ describe('LoadNotesController', () => {
     const loadAllSpy = jest.spyOn(loadNotesStub, 'loadAll');
     await sut.handle({});
     expect(loadAllSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('Should return 500 if LoadNotes throw', async () => {
+    const { sut, loadNotesStub } = makeSut();
+    jest.spyOn(loadNotesStub, 'loadAll').mockImplementationOnce(() => {
+      throw new Error();
+    });
+    const httpResponse = await sut.handle({});
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
