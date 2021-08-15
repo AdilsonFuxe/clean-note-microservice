@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "__tests__", "jest-integration-config.ts", "jest-unit-config.ts", "jest.config.ts", "globalConfig.json"
+  ]
+}

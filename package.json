@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node dist/main/server.js",
+    "build": "rimraf dist && tsc -p tsconfig-build.json",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:unit": "npm test -- --passWithNoTests --watch -c jest-unit-config.ts",
     "test:integration": "npm test -- --passWithNoTests --watch -c jest-integration-config.ts",
     "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -33,6 +36,7 @@
     "lint-staged": "^11.1.2",
     "mockdate": "^3.0.5",
     "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
     "supertest": "^6.1.5",
     "ts-jest": "^27.0.4",
     "ts-node": "^10.2.0",
@@ -40,6 +44,13 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "module-alias": "^2.2.2",
     "mongoose": "^5.13.7"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "_moduleAliases": {
+    "@src": "dist"
   }
 }
