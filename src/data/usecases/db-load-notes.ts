@@ -6,7 +6,7 @@ export class DbLoadNotes implements LoadNotes {
   constructor(private readonly loadNotesRepository: LoadNotesRepository) {}
 
   async loadAll(): Promise<readonly Note[]> {
-    await this.loadNotesRepository.loadAll();
-    return await Promise.resolve([]);
+    const notes = await this.loadNotesRepository.loadAll();
+    return notes;
   }
 }
