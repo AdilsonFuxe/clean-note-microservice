@@ -42,4 +42,15 @@ describe('DbLoadNotes UseCase', () => {
     await sut.loadAll();
     expect(loadAllSpy).toHaveBeenCalledTimes(1);
   });
+
+  it('Should call LoadNotesRepository', async () => {
+    const { sut, loadNotesRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadNotesRepositoryStub, 'loadAll')
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+    const promise = sut.loadAll();
+    await expect(promise).rejects.toThrow();
+  });
 });
