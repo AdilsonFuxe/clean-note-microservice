@@ -3,3 +3,4 @@ dist
 coverage
 ./data
 jest.config.ts
+jest-mongodb-config.ts
