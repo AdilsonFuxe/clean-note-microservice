@@ -1,6 +1,6 @@
 import { Note } from '@src/domain/models';
 import { LoadNotes } from '@src/domain/usecases';
-import { LoadNotesController } from '@src/presentation/controllers/load-notes-contoller';
+import { LoadNotesController } from '@src/presentation/controllers';
 import { ok, serverError } from '@src/presentation/helpers';
 import mockDate from 'mockdate';
 

@@ -1,5 +1,5 @@
 import { Controller } from '@src/presentation/protocols';
-import { LoadNotesController } from '@src/presentation/controllers/load-notes-contoller';
+import { LoadNotesController } from '@src/presentation/controllers';
 import { makeDbLoadNotes } from '@src/main/factories/usecases/db-load-notes-factory';
 
 export const makeLoadNotesController = (): Controller => {
