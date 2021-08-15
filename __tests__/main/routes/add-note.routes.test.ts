@@ -14,7 +14,7 @@ describe('Post /note', () => {
 
   it('Should return 201 post note success', async () => {
     const httpResponse = await request(app)
-      .post('/api/v1/note')
+      .post('/api/v1/notes')
       .send({
         title: 'any_title',
         description: 'any_description',
