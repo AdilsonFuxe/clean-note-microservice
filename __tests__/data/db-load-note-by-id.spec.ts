@@ -42,10 +42,22 @@ describe('DbLoadNoteById UseCase', () => {
   afterAll(() => {
     mockDate.reset();
   });
+
   it('Should call LoadNoteByIdRepository with correct id', async () => {
     const { sut, loadNoteByIdRepositoryStub } = makeSut();
     const loadByIdSpy = jest.spyOn(loadNoteByIdRepositoryStub, 'loadById');
     await sut.loadById('any_id');
     expect(loadByIdSpy).toHaveBeenCalledWith('any_id');
+  });
+
+  it('Should throw if LoadNoteByIdRepository throws', async () => {
+    const { sut, loadNoteByIdRepositoryStub } = makeSut();
+    jest
+      .spyOn(loadNoteByIdRepositoryStub, 'loadById')
+      .mockImplementationOnce(() => {
+        throw new Error();
+      });
+    const promise = sut.loadById('any_id');
+    await expect(promise).rejects.toThrow();
   });
 });
