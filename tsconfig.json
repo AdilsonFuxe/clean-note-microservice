@@ -1,5 +1,5 @@
 {
-  "compilerOptions": { 
+  "compilerOptions": {
     "outDir": "dist",
     "module": "commonjs",
     "target": "es2019",
@@ -8,9 +8,10 @@
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"]
-    },
-    "include": [
-      "src"
-    ],
-  }
+    }
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": []
 }
