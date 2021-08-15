@@ -60,4 +60,10 @@ describe('DbLoadNoteById UseCase', () => {
     const promise = sut.loadById('any_id');
     await expect(promise).rejects.toThrow();
   });
+
+  it('Should return a note on LoadNoteByIdRepository success', async () => {
+    const { sut } = makeSut();
+    const note = await sut.loadById('any_id');
+    expect(note).toEqual(mockNote());
+  });
 });
