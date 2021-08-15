@@ -8,7 +8,7 @@ export class DbLoadNoteById implements LoadNoteById {
   ) {}
 
   async loadById(id: string): Promise<Note> {
-    await this.loadNoteByIdRepository.loadById(id);
-    return null;
+    const note = await this.loadNoteByIdRepository.loadById(id);
+    return note;
   }
 }
