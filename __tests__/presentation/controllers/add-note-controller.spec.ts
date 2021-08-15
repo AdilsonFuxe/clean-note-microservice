@@ -4,6 +4,7 @@ import { AddNoteController } from '@src/presentation/controllers';
 import { MissingParamError } from '@src/presentation/errors';
 import { badRequest, created, serverError } from '@src/presentation/helpers';
 import { HttpRequest } from '@src/presentation/protocols';
+import mockDate from 'mockdate';
 
 const mockNote = (): Note => ({
   id: 'any_id',
@@ -44,6 +45,14 @@ const makeSut = (): SutTypes => {
 };
 
 describe('AddNoteController', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    mockDate.reset();
+  });
+
   it('Should return 400 if title is not provided in http request body', async () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle({
