@@ -7,11 +7,11 @@
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"]
+      "@src/*": ["src/*"],
+      "@test-suite/*": ["test-suite/*"],
     }
   },
   "include": [
-    "src"
+    "src","__tests__", "test-suite"
   ],
-  "exclude": []
 }
