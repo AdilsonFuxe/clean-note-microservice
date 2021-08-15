@@ -1,10 +1,51 @@
+import { Note } from '@src/domain/models';
+import { AddNote } from '@src/domain/usecases';
 import { AddNoteController } from '@src/presentation/controllers';
 import { MissingParamError } from '@src/presentation/errors';
 import { badRequest } from '@src/presentation/helpers';
+import { HttpRequest } from '@src/presentation/protocols';
+
+const mockNote = (): Note => ({
+  id: 'any_id',
+  title: 'any_title',
+  description: 'any_description',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+});
+
+const mockAddNote = (): AddNote => {
+  class AddNoteStub implements AddNote {
+    async add(): Promise<Note> {
+      return await Promise.resolve(mockNote());
+    }
+  }
+  return new AddNoteStub();
+};
+
+type SutTypes = {
+  sut: AddNoteController;
+  addNoteStub: AddNote;
+};
+
+const mockHttpRequest = (): HttpRequest => ({
+  body: {
+    title: 'any_title',
+    description: 'any_description',
+  },
+});
+
+const makeSut = (): SutTypes => {
+  const addNoteStub = mockAddNote();
+  const sut = new AddNoteController(addNoteStub);
+  return {
+    addNoteStub,
+    sut,
+  };
+};
 
 describe('AddNoteController', () => {
   it('Should return 400 if title is not provided in http request body', async () => {
-    const sut = new AddNoteController();
+    const { sut } = makeSut();
     const httpResponse = await sut.handle({
       body: {
         description: 'any_description',
@@ -14,7 +55,7 @@ describe('AddNoteController', () => {
   });
 
   it('Should return 400 if description is not provided in http request body', async () => {
-    const sut = new AddNoteController();
+    const { sut } = makeSut();
     const httpResponse = await sut.handle({
       body: {
         title: 'any_title',
@@ -23,5 +64,13 @@ describe('AddNoteController', () => {
     expect(httpResponse).toEqual(
       badRequest(new MissingParamError('description'))
     );
+  });
+
+  it('Should call AddNote with correct values', async () => {
+    const { sut, addNoteStub } = makeSut();
+    const addSpy = jest.spyOn(addNoteStub, 'add');
+    const httpRequest = mockHttpRequest();
+    await sut.handle(httpRequest);
+    expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 });
