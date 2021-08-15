@@ -21,11 +21,24 @@ const mockLoadNotesRepository = (): LoadNotesRepository => {
   return new LoadNotesRepositoryStub();
 };
 
+type SutTypes = {
+  sut: DbLoadNotes;
+  loadNotesRepositoryStub: LoadNotesRepository;
+};
+
+const makeSut = (): SutTypes => {
+  const loadNotesRepositoryStub = mockLoadNotesRepository();
+  const sut = new DbLoadNotes(loadNotesRepositoryStub);
+  return {
+    sut,
+    loadNotesRepositoryStub,
+  };
+};
+
 describe('DbLoadNotes UseCase', () => {
   it('Should call LoadNotesRepository', async () => {
-    const loadNotesRepositoryStub = mockLoadNotesRepository();
+    const { sut, loadNotesRepositoryStub } = makeSut();
     const loadAllSpy = jest.spyOn(loadNotesRepositoryStub, 'loadAll');
-    const sut = new DbLoadNotes(loadNotesRepositoryStub);
     await sut.loadAll();
     expect(loadAllSpy).toHaveBeenCalledTimes(1);
   });
