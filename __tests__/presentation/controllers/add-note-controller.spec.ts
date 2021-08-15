@@ -2,7 +2,7 @@ import { Note } from '@src/domain/models';
 import { AddNote } from '@src/domain/usecases';
 import { AddNoteController } from '@src/presentation/controllers';
 import { MissingParamError } from '@src/presentation/errors';
-import { badRequest, serverError } from '@src/presentation/helpers';
+import { badRequest, created, serverError } from '@src/presentation/helpers';
 import { HttpRequest } from '@src/presentation/protocols';
 
 const mockNote = (): Note => ({
@@ -81,5 +81,12 @@ describe('AddNoteController', () => {
     });
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('Should return 201 with the new note on AddNote success', async () => {
+    const { sut } = makeSut();
+
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(created(mockNote()));
   });
 });
