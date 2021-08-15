@@ -1,6 +1,7 @@
 import { LoadNotesRepository } from '@src/data/protocols';
 import { DbLoadNotes } from '@src/data/usecases';
 import { Note } from '@src/domain/models';
+import mockDate from 'mockdate';
 
 const mockNotes = (): Note[] => [
   {
@@ -36,6 +37,13 @@ const makeSut = (): SutTypes => {
 };
 
 describe('DbLoadNotes UseCase', () => {
+  beforeAll(() => {
+    mockDate.set(new Date());
+  });
+
+  afterAll(() => {
+    mockDate.reset();
+  });
   it('Should call LoadNotesRepository', async () => {
     const { sut, loadNotesRepositoryStub } = makeSut();
     const loadAllSpy = jest.spyOn(loadNotesRepositoryStub, 'loadAll');
@@ -52,5 +60,11 @@ describe('DbLoadNotes UseCase', () => {
       });
     const promise = sut.loadAll();
     await expect(promise).rejects.toThrow();
+  });
+
+  it('Should return a list of notes on LoadNotesRepository', async () => {
+    const { sut } = makeSut();
+    const notes = await sut.loadAll();
+    expect(notes).toEqual(mockNotes());
   });
 });
