@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '@src/main/config/app';
 import { NoteMongooseModel, MongoHelper } from '@src/infra/db/mongoose';
+import { Types } from 'mongoose';
 
 describe('Get /notes/:id', () => {
   beforeAll(async () => {
@@ -26,5 +27,11 @@ describe('Get /notes/:id', () => {
         description: 'description2',
       })
     );
+  });
+
+  it('Should return 404 on get note fails', async () => {
+    await request(app)
+      .get(`/api/v1/notes/${Types.ObjectId().toHexString()}`)
+      .expect(404);
   });
 });
