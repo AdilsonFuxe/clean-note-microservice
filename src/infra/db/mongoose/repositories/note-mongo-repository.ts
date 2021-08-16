@@ -1,5 +1,6 @@
 import {
   AddNoteRepository,
+  DeleteNoteRepository,
   LoadNoteByIdRepository,
   LoadNotesRepository,
 } from '@src/data/protocols';
@@ -8,7 +9,11 @@ import { AddNoteParams } from '@src/domain/usecases';
 import { NoteMongooseModel, MongoHelper } from '@src/infra/db/mongoose';
 
 export class NoteMongoRepository
-  implements AddNoteRepository, LoadNotesRepository, LoadNoteByIdRepository
+  implements
+    AddNoteRepository,
+    LoadNotesRepository,
+    LoadNoteByIdRepository,
+    DeleteNoteRepository
 {
   async add(params: AddNoteParams): Promise<Note> {
     const doc = new NoteMongooseModel(params);
@@ -26,5 +31,9 @@ export class NoteMongoRepository
   async loadById(id: string): Promise<Note> {
     const note = await NoteMongooseModel.findById(id).lean();
     return MongoHelper.serialize(note);
+  }
+
+  async delete(id: string): Promise<void> {
+    await NoteMongooseModel.findByIdAndDelete(id);
   }
 }
