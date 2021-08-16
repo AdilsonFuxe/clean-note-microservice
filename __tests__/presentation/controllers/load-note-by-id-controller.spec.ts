@@ -1,7 +1,7 @@
 import { Note } from '@src/domain/models';
 import { LoadNoteById } from '@src/domain/usecases';
 import { LoadNoteByIdController } from '@src/presentation/controllers/load-note-by-id-controller';
-import { notFounError, ok } from '@src/presentation/helpers';
+import { notFounError, ok, serverError } from '@src/presentation/helpers';
 import { HttpRequest } from '@src/presentation/protocols';
 import mockDate from 'mockdate';
 
@@ -71,5 +71,12 @@ describe('LoadNoteByIdController', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(ok(mockNote()));
+  });
+
+  it('Should return 500 LoadNoteById throw', async () => {
+    const { sut, loadNoteByIdStub } = makeSut();
+    jest.spyOn(loadNoteByIdStub, 'loadById').mockRejectedValueOnce(new Error());
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
