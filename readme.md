@@ -20,6 +20,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+  - [Run With Docker](#run-with-docker)
 - [Endpoints](#endpoints)
   - [Add Note](#add-note)
   - [Get One Note](#get-one-note)
