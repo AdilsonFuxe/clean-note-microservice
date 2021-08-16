@@ -25,3 +25,7 @@ export const notFounError = (paramName: string): HttpResponse => ({
   statusCode: HttpStatusCode.notFound,
   body: new NotFoundError(paramName),
 });
+
+export const noContent = (): HttpResponse => ({
+  statusCode: HttpStatusCode.noContent,
+});

@@ -3,7 +3,11 @@ import {
   HttpRequest,
   HttpResponse,
 } from '@src/presentation/protocols';
-import { notFounError, serverError } from '@src/presentation/helpers';
+import {
+  noContent,
+  notFounError,
+  serverError,
+} from '@src/presentation/helpers';
 import { DeleteNote, LoadNoteById } from '@src/domain/usecases';
 
 export class DeleteNoteController implements Controller {
@@ -19,7 +23,7 @@ export class DeleteNoteController implements Controller {
         return notFounError('note');
       }
       await this.deleteNote.delete(httpRequest.params.id);
-      return await Promise.resolve({ statusCode: 200 });
+      return noContent();
     } catch (error) {
       return serverError(error);
     }
