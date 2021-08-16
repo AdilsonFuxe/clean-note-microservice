@@ -83,7 +83,7 @@ describe('LoadNoteByIdController', () => {
     expect(httpResponse).toEqual(notFounError('note'));
   });
 
-  it('Should return 500 LoadNoteById throw', async () => {
+  it('Should return 500 if LoadNoteById throw', async () => {
     const { sut, loadNoteByIdStub } = makeSut();
     jest.spyOn(loadNoteByIdStub, 'loadById').mockRejectedValueOnce(new Error());
     const httpResponse = await sut.handle(mockHttpRequest());
@@ -101,5 +101,12 @@ describe('LoadNoteByIdController', () => {
     const { sut } = makeSut();
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(noContent());
+  });
+
+  it('Should return 500 if DeleteNote throw', async () => {
+    const { sut, deleteNoteStub } = makeSut();
+    jest.spyOn(deleteNoteStub, 'delete').mockRejectedValueOnce(new Error());
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
