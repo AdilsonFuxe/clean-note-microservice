@@ -53,16 +53,16 @@ describe('LoadNotesController', () => {
     expect(loadAllSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('Should return 200 on loadAll success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle({});
+    expect(httpResponse).toEqual(ok(mockNotes()));
+  });
+
   it('Should return 500 if LoadNotes throw', async () => {
     const { sut, loadNotesStub } = makeSut();
     jest.spyOn(loadNotesStub, 'loadAll').mockRejectedValueOnce(new Error());
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(serverError(new Error()));
-  });
-
-  it('Should return 200 on loadAll success', async () => {
-    const { sut } = makeSut();
-    const httpResponse = await sut.handle({});
-    expect(httpResponse).toEqual(ok(mockNotes()));
   });
 });

@@ -83,17 +83,17 @@ describe('AddNoteController', () => {
     expect(addSpy).toHaveBeenCalledWith(httpRequest.body);
   });
 
-  it('Should return 500 if AddNote throws', async () => {
-    const { sut, addNoteStub } = makeSut();
-    jest.spyOn(addNoteStub, 'add').mockRejectedValueOnce(new Error());
-    const httpResponse = await sut.handle(mockHttpRequest());
-    expect(httpResponse).toEqual(serverError(new Error()));
-  });
-
   it('Should return 201 with the new note on AddNote success', async () => {
     const { sut } = makeSut();
 
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(created(mockNote()));
+  });
+
+  it('Should return 500 if AddNote throws', async () => {
+    const { sut, addNoteStub } = makeSut();
+    jest.spyOn(addNoteStub, 'add').mockRejectedValueOnce(new Error());
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
