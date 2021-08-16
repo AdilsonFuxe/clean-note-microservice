@@ -2,7 +2,7 @@
 
 <br />
 <p align="center">
-  <h1 align="center">Node.js Mote Microservice</h1>
+  <h1 align="center">Node.js Note Microservice</h1>
 
   <p align="center">
    A simple API built with Node.js that follows Clean Architecture + TDD + SOLID + DDD principles
