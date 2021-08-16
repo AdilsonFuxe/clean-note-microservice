@@ -1,5 +1,5 @@
 import { LoadNoteById } from '@src/domain/usecases';
-import { serverError } from '@src/presentation/helpers';
+import { notFounError, serverError } from '@src/presentation/helpers';
 import {
   Controller,
   HttpRequest,
@@ -10,7 +10,10 @@ export class LoadNoteByIdController implements Controller {
   constructor(private readonly loadNoteById: LoadNoteById) {}
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      await this.loadNoteById.loadById(httpRequest.params.id);
+      const note = await this.loadNoteById.loadById(httpRequest.params.id);
+      if (!note) {
+        return notFounError('note');
+      }
       return await Promise.resolve({ statusCode: 200 });
     } catch (error) {
       return serverError(error);

@@ -1,5 +1,5 @@
 import { HttpResponse, HttpStatusCode } from '@src/presentation/protocols';
-import { ServerError } from '@src/presentation/errors';
+import { NotFoundError, ServerError } from '@src/presentation/errors';
 
 export const serverError = (error: Error): HttpResponse => ({
   statusCode: HttpStatusCode.serverError,
@@ -19,4 +19,9 @@ export const created = (data: any): HttpResponse => ({
 export const ok = (data: any): HttpResponse => ({
   statusCode: HttpStatusCode.ok,
   body: data,
+});
+
+export const notFounError = (paramName: string): HttpResponse => ({
+  statusCode: HttpStatusCode.notFound,
+  body: new NotFoundError(paramName),
 });
