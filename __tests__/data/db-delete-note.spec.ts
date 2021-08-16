@@ -31,4 +31,13 @@ describe('DbDeleteNOte UseCase', () => {
     await sut.delete('any_id');
     expect(deleteSpy).toHaveBeenCalledWith('any_id');
   });
+
+  it('Should trhow if DeleteNoteRepository throw', async () => {
+    const { sut, deleteNoteRepositoryStub } = makeSut();
+    jest
+      .spyOn(deleteNoteRepositoryStub, 'delete')
+      .mockRejectedValueOnce(new Error());
+    const promise = sut.delete('any_id');
+    await expect(promise).rejects.toThrow();
+  });
 });
