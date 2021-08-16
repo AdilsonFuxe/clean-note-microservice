@@ -1,5 +1,5 @@
 import { Note } from '@src/domain/models';
-import { LoadNoteById } from '@src/domain/usecases';
+import { DeleteNote, LoadNoteById } from '@src/domain/usecases';
 import { DeleteNoteController } from '@src/presentation/controllers';
 import { notFounError, serverError } from '@src/presentation/helpers';
 import { HttpRequest } from '@src/presentation/protocols';
@@ -22,9 +22,19 @@ const mockLoadNoteById = (): LoadNoteById => {
   return new LoadNoteByIdStub();
 };
 
+const mockDeleteNote = (): DeleteNote => {
+  class DeleteNoteStub implements DeleteNote {
+    async delete(): Promise<void> {
+      return await Promise.resolve();
+    }
+  }
+  return new DeleteNoteStub();
+};
+
 type SutTypes = {
   sut: DeleteNoteController;
   loadNoteByIdStub: LoadNoteById;
+  deleteNoteStub: DeleteNote;
 };
 
 const mockHttpRequest = (): HttpRequest => ({
@@ -35,10 +45,12 @@ const mockHttpRequest = (): HttpRequest => ({
 
 const makeSut = (): SutTypes => {
   const loadNoteByIdStub = mockLoadNoteById();
-  const sut = new DeleteNoteController(loadNoteByIdStub);
+  const deleteNoteStub = mockDeleteNote();
+  const sut = new DeleteNoteController(loadNoteByIdStub, deleteNoteStub);
   return {
-    loadNoteByIdStub,
     sut,
+    loadNoteByIdStub,
+    deleteNoteStub,
   };
 };
 
@@ -72,5 +84,12 @@ describe('LoadNoteByIdController', () => {
     jest.spyOn(loadNoteByIdStub, 'loadById').mockRejectedValueOnce(new Error());
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
+  });
+
+  it('Should call DeleteNote with correct param Id', async () => {
+    const { sut, deleteNoteStub } = makeSut();
+    const deleteSpy = jest.spyOn(deleteNoteStub, 'delete');
+    await sut.handle(mockHttpRequest());
+    expect(deleteSpy).toHaveBeenCalledWith('any_id');
   });
 });
