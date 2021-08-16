@@ -1,6 +1,7 @@
 import { Note } from '@src/domain/models';
 import { LoadNoteById } from '@src/domain/usecases';
 import { LoadNoteByIdController } from '@src/presentation/controllers/load-note-by-id-controller';
+import { notFounError } from '@src/presentation/helpers';
 import { HttpRequest } from '@src/presentation/protocols';
 import mockDate from 'mockdate';
 
@@ -55,5 +56,14 @@ describe('LoadNoteByIdController', () => {
     const loadByIdSpy = jest.spyOn(loadNoteByIdStub, 'loadById');
     await sut.handle(mockHttpRequest());
     expect(loadByIdSpy).toHaveBeenCalledWith('any_id');
+  });
+
+  it('Should return 404 LoadNoteById fails', async () => {
+    const { sut, loadNoteByIdStub } = makeSut();
+    jest
+      .spyOn(loadNoteByIdStub, 'loadById')
+      .mockReturnValueOnce(Promise.resolve(null));
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(notFounError('note'));
   });
 });
