@@ -61,9 +61,7 @@ describe('DbAddNote UseCase', () => {
 
   it('Should throw if AddNoteRepository throw', async () => {
     const { sut, addNoteRepositoryStub } = makeSut();
-    jest.spyOn(addNoteRepositoryStub, 'add').mockImplementation(() => {
-      throw new Error();
-    });
+    jest.spyOn(addNoteRepositoryStub, 'add').mockRejectedValueOnce(new Error());
     const promise = sut.add(mockAddNoteParams());
     await expect(promise).rejects.toThrow();
   });

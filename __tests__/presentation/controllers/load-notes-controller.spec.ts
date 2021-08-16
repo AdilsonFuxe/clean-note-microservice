@@ -55,9 +55,7 @@ describe('LoadNotesController', () => {
 
   it('Should return 500 if LoadNotes throw', async () => {
     const { sut, loadNotesStub } = makeSut();
-    jest.spyOn(loadNotesStub, 'loadAll').mockImplementationOnce(() => {
-      throw new Error();
-    });
+    jest.spyOn(loadNotesStub, 'loadAll').mockRejectedValueOnce(new Error());
     const httpResponse = await sut.handle({});
     expect(httpResponse).toEqual(serverError(new Error()));
   });

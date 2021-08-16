@@ -55,9 +55,7 @@ describe('DbLoadNotes UseCase', () => {
     const { sut, loadNotesRepositoryStub } = makeSut();
     jest
       .spyOn(loadNotesRepositoryStub, 'loadAll')
-      .mockImplementationOnce(() => {
-        throw new Error();
-      });
+      .mockRejectedValueOnce(new Error());
     const promise = sut.loadAll();
     await expect(promise).rejects.toThrow();
   });

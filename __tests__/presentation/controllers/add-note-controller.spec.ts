@@ -85,9 +85,7 @@ describe('AddNoteController', () => {
 
   it('Should return 500 if AddNote throws', async () => {
     const { sut, addNoteStub } = makeSut();
-    jest.spyOn(addNoteStub, 'add').mockImplementationOnce(() => {
-      throw new Error();
-    });
+    jest.spyOn(addNoteStub, 'add').mockRejectedValueOnce(new Error());
     const httpResponse = await sut.handle(mockHttpRequest());
     expect(httpResponse).toEqual(serverError(new Error()));
   });
