@@ -1,5 +1,5 @@
 import { LoadNoteById } from '@src/domain/usecases';
-import { notFounError, serverError } from '@src/presentation/helpers';
+import { notFounError, ok, serverError } from '@src/presentation/helpers';
 import {
   Controller,
   HttpRequest,
@@ -14,7 +14,7 @@ export class LoadNoteByIdController implements Controller {
       if (!note) {
         return notFounError('note');
       }
-      return await Promise.resolve({ statusCode: 200 });
+      return ok(note);
     } catch (error) {
       return serverError(error);
     }
