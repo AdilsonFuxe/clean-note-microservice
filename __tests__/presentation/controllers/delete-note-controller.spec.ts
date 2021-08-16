@@ -1,7 +1,11 @@
 import { Note } from '@src/domain/models';
 import { DeleteNote, LoadNoteById } from '@src/domain/usecases';
 import { DeleteNoteController } from '@src/presentation/controllers';
-import { notFounError, serverError } from '@src/presentation/helpers';
+import {
+  noContent,
+  notFounError,
+  serverError,
+} from '@src/presentation/helpers';
 import { HttpRequest } from '@src/presentation/protocols';
 import mockDate from 'mockdate';
 
@@ -91,5 +95,11 @@ describe('LoadNoteByIdController', () => {
     const deleteSpy = jest.spyOn(deleteNoteStub, 'delete');
     await sut.handle(mockHttpRequest());
     expect(deleteSpy).toHaveBeenCalledWith('any_id');
+  });
+
+  it('Should 204 on DeleteNote success', async () => {
+    const { sut } = makeSut();
+    const httpResponse = await sut.handle(mockHttpRequest());
+    expect(httpResponse).toEqual(noContent());
   });
 });
